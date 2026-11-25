@@ -4,11 +4,10 @@ import type { ReactNode } from 'react';
 
 export const messageBlockWidth = 'var(--rcx-message-block-width-fixed, 368px)';
 
-const fullWidthTypes: readonly string[] = ['layout', 'data_table', 'data_visualization', 'carousel', 'table'];
+const cappedTypes: readonly string[] = ['image', 'video', 'preview', 'info_card', 'file'];
 
-/** Whether a top-level block of a message sizes itself instead of being capped to the message block width. */
-export const sizesItselfInMessage = (block: UiKit.LayoutBlock): boolean =>
-	fullWidthTypes.includes(block.type) || block.type === 'container';
+/** Whether a top-level block of a message should be capped to the message block width. */
+export const cappedInMessage = (block: UiKit.LayoutBlock): boolean => cappedTypes.includes(block.type);
 
 export const MessageBlockWidth = ({ children }: { children: ReactNode }) => (
 	<Box className='rcx-uikit-message-block' width='full' maxWidth={messageBlockWidth}>

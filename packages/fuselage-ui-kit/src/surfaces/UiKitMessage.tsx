@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 
 import { FuselageMessageSurfaceRenderer } from './FuselageMessageSurfaceRenderer';
 import MessageSurface from './MessageSurface';
-import { MessageBlockWidth, sizesItselfInMessage } from '../utils/messageBlockWidth';
+import { MessageBlockWidth, cappedInMessage } from '../utils/messageBlockWidth';
 
 export const messageParser = new FuselageMessageSurfaceRenderer();
 
@@ -16,7 +16,7 @@ const topLevelBlocks = (blocks: readonly UiKit.LayoutBlock[], conditions: UiKit.
 		return messageParser.render([block], conditions).length ? block.render : [];
 	});
 
-/** Draws a message's blocks, capping each top-level block to the message block width unless it sizes itself. */
+/** Draws a message's blocks, capping only media and compact-card blocks to the message block width. */
 export const UiKitMessage = (blocks: readonly UiKit.LayoutBlock[], conditions: UiKit.Conditions = {}) => {
 	const allConditions: UiKit.Conditions = { engine: 'rocket.chat', ...conditions };
 
@@ -29,7 +29,7 @@ export const UiKitMessage = (blocks: readonly UiKit.LayoutBlock[], conditions: U
 					return null;
 				}
 
-				return <Fragment key={index}>{sizesItselfInMessage(block) ? element : <MessageBlockWidth>{element}</MessageBlockWidth>}</Fragment>;
+				return <Fragment key={index}>{cappedInMessage(block) ? <MessageBlockWidth>{element}</MessageBlockWidth> : element}</Fragment>;
 			})}
 		</MessageSurface>
 	);
